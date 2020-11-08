@@ -3,61 +3,67 @@
 #include "Helpers.h"
 #include "Graphics.h"
 
-void playRound() {
-    int bet = 0;
+int playerBet = 0;
 
-    std::cout << "Please enter your bet: ";
-    std::cin >> bet;
-    std::cout << "\n\n";
+void promptUserForBet() {
+    std::cout << "    Please enter your bet: ";
+    std::cin >> playerBet;
+    renderDivider();
+}
+
+void handlePlayerBetInput() {
+    promptUserForBet();
 
     while (std::cin.fail()) {
-        std::cout << "Please enter your bet (numbers only): ";
         std::cin.clear();
         std::cin.ignore(10000, '\n');
-        std::cin >> bet;
-        std::cout << "\n\n";
+        std::cout << "    You must enter a number.\n\n";
+        promptUserForBet();
     }
 
-    while (bet <= 0 || bet > playerCredits) {
+    while (playerBet <= 0 || playerBet > playerCredits) {
 
-        if (bet <= 0) {
-            std::cout << "You must bet at least 1 credit.\n";
-            std::cout << "Please enter your bet: ";
-            std::cin >> bet;
-            std::cout << "\n\n";
+        if (playerBet <= 0) {
+            std::cout << "    You must bet at least 1 credit.\n\n";
+            promptUserForBet();
         }
-        else if (bet > playerCredits) {
-            std::cout << "You must bet at least 1 credit.\n";
-            std::cout << "Please enter your bet: ";
-            std::cin >> bet;
-            std::cout << "\n\n";
+        else if (playerBet > playerCredits) {
+            std::cout << "    You can't bet more credits than you have.\n";
+            std::cout << "    You currently have " << playerCredits << " credits.\n\n";
+            promptUserForBet();
         }
     }
+}
+
+void playRound() {
+    handlePlayerBetInput();
 
     int playerTotal = 0;
     bool playing = true;
 
-    std::cout << "Rolling some dice...\n\n";
-
     while (playing) {
+        std::cout << "    Rolling some dice...\n\n";
+
         int firstRoll = rollDie();
         int secondRoll = rollDie();
         int rollTotal = firstRoll + secondRoll;
         playerTotal += rollTotal;
+
+        std::cout << "    You rolled " << rollTotal << ".\n\n";
 
         renderFirstDie(firstRoll);
         renderSecondDie(secondRoll);
         std::cout << "\n\n";
 
         if (playerTotal == 21) {
-            std::cout << "DIEJACK! Your total is 21. You win the round!\n\n";
-            playerCredits += bet * 2;
+            std::cout << "DICEJACK! Your total is 21. You win the round!\n\n";
+            playerCredits += playerBet * 2;
             return;
         }
 
         if (playerTotal > 21) {
             std::cout << "Oh no! You ended up on " << playerTotal << " and went bust!\n\n";
-            playerCredits -= bet;
+            playerCredits -= playerBet;
             return;
         }
 
@@ -67,7 +73,7 @@ void playRound() {
 
         std::cout << "Would you like to roll again? [Y]es or [N]o? ";
         std::cin >> rollAgain;
-        std::cout << "\n";
+        renderDivider();
 
         while (rollAgain != 'y' && rollAgain != 'Y' && rollAgain != 'n' && rollAgain != 'N') {
             std::cout << "Would you like to roll again? [Y]es or [N]o? ";
@@ -85,19 +91,19 @@ void playRound() {
 
     if (computerTotal > 21) {
         std::cout << "The computer rolled " << computerTotal << ".\n";
-        std::cout << "You win " << (bet * 2) << " credits!\n\n";
-        playerCredits += bet * 2;
+        std::cout << "You win " << (playerBet * 2) << " credits!\n\n";
+        playerCredits += playerBet * 2;
         return;
     }
     else if (computerTotal > playerTotal || computerTotal == playerTotal) {
         std::cout << "The computer rolled " << computerTotal << ".\n";
-        std::cout << "You lost " << bet << " credits. Better luck next time!\n\n";
-        playerCredits -= bet;
+        std::cout << "You lost " << playerBet << " credits. Better luck next time!\n\n";
+        playerCredits -= playerBet;
         return;
     }
     else {
         std::cout << "The computer rolled " << computerTotal << ".\n";
-        std::cout << "You win " << (bet * 2) << " credits!\n\n";
-        playerCredits += bet * 2;
+        std::cout << "You win " << (playerBet * 2) << " credits!\n\n";
+        playerCredits += playerBet * 2;
     }
 }
