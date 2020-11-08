@@ -1,5 +1,9 @@
 #include <iostream>
 
+void renderDivider() {
+	std::cout << "\n  +------------------------------------------------------------+  \n\n";
+}
+
 void renderFirstDie(int value) {
 	switch (value) {
 	case 1:
