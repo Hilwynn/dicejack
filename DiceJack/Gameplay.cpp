@@ -1,109 +1,181 @@
 #include <iostream>
-#include "Source.h"
-#include "Helpers.h"
+#include <chrono>
+#include <thread>
 #include "Graphics.h"
+#include "Helpers.h"
+#include "Source.h"
+
+using namespace std::this_thread;
+using namespace std::chrono_literals;
+using std::chrono::system_clock;
 
 int playerBet = 0;
+int playerTotal = 0;
 
-void promptUserForBet() {
-    std::cout << "    Please enter your bet: ";
+void promptPlayerForBet() {
+    std::cout << "    Place your bet: ";
     std::cin >> playerBet;
+
     renderDivider();
 }
 
 void handlePlayerBetInput() {
-    promptUserForBet();
+    promptPlayerForBet();
 
     while (std::cin.fail()) {
         std::cin.clear();
         std::cin.ignore(10000, '\n');
+        
         std::cout << "    You must enter a number.\n\n";
-        promptUserForBet();
+
+        promptPlayerForBet();
     }
 
     while (playerBet <= 0 || playerBet > playerCredits) {
-
         if (playerBet <= 0) {
             std::cout << "    You must bet at least 1 credit.\n\n";
-            promptUserForBet();
+
+            promptPlayerForBet();
         }
         else if (playerBet > playerCredits) {
-            std::cout << "    You can't bet more credits than you have.\n";
+            std::cout << "    You can't bet more credits than you have.\n\n";
             std::cout << "    You currently have " << playerCredits << " credits.\n\n";
-            promptUserForBet();
+
+            promptPlayerForBet();
         }
     }
+}
+
+void handlePlayerTurn() {
+    renderRollingDice();
+
+    std::cout << "    Rolling some dice...\n";
+
+    int firstRoll = rollDie();
+    int secondRoll = rollDie();
+    int rollTotal = firstRoll + secondRoll;
+
+    sleep_until(system_clock::now() + 2s);
+
+    renderFirstDie(firstRoll);
+    renderSecondDie(secondRoll);
+
+    std::cout << "    You rolled " << rollTotal << ".\n";
+
+    playerTotal += rollTotal;
+}
+
+int handleComputerTurn() {
+    bool playing = true;
+    int total = 0;
+
+    while (playing) {
+        renderRollingDice();
+
+        std::cout << "    Your opponent is rolling some dice...\n";
+
+        sleep_until(system_clock::now() + 2s);
+
+        int firstRoll = rollDie();
+        int secondRoll = rollDie();
+        int rollTotal = firstRoll + secondRoll;
+
+        total += rollTotal;
+
+        renderFirstDie(firstRoll);
+        renderSecondDie(secondRoll);
+
+        std::cout << "    Your opponent rolled " << rollTotal << ".\n";
+
+        renderDivider();
+
+            if (total > 21) {
+                std::cout << "    Your opponent hit " << total << " and went bust!\n\n";
+
+                playing = false;
+            } else if (total < 22 && total >= playerTotal) {
+                playing = false;
+            }
+            else {
+                std::cout << "    Your opponent's current total is " << total << ".\n\n";
+                std::cout << "    They're going to roll again.\n";
+
+                sleep_until(system_clock::now() + 3s);
+
+                renderDivider();
+            }
+    }
+
+    return total;
 }
 
 void playRound() {
     handlePlayerBetInput();
 
-    int playerTotal = 0;
     bool playing = true;
 
+    playerTotal = 0;
+
     while (playing) {
-        std::cout << "    Rolling some dice...\n\n";
+        handlePlayerTurn();
 
-        int firstRoll = rollDie();
-        int secondRoll = rollDie();
-        int rollTotal = firstRoll + secondRoll;
-        playerTotal += rollTotal;
-
-        std::cout << "    You rolled " << rollTotal << ".\n\n";
-
-        renderFirstDie(firstRoll);
-        renderSecondDie(secondRoll);
-        std::cout << "\n\n";
-
-        if (playerTotal == 21) {
-            std::cout << "DICEJACK! Your total is 21. You win the round!\n\n";
-            playerCredits += playerBet * 2;
-            return;
-        }
-
-        if (playerTotal > 21) {
-            std::cout << "Oh no! You ended up on " << playerTotal << " and went bust!\n\n";
-            playerCredits -= playerBet;
-            return;
-        }
-
-        std::cout << "Your current total is " << playerTotal << ".\n\n";
-
-        char rollAgain;
-
-        std::cout << "Would you like to roll again? [Y]es or [N]o? ";
-        std::cin >> rollAgain;
         renderDivider();
 
-        while (rollAgain != 'y' && rollAgain != 'Y' && rollAgain != 'n' && rollAgain != 'N') {
-            std::cout << "Would you like to roll again? [Y]es or [N]o? ";
-            std::cin >> rollAgain;
-            std::cout << "\n";
+        if (playerTotal > 21) {
+            std::cout << "    Oh no! You hit " << playerTotal << " and went bust!\n\n";
+            std::cout << "    You lost " << playerBet << " credits.\n";
+
+            playerCredits -= playerBet;
+            
+            return;
         }
+
+        std::cout << "    Your current total is " << playerTotal << ".\n\n";
+
+        char rollAgain = 'x';
+
+        while (rollAgain != 'y' && rollAgain != 'Y' && rollAgain != 'n' && rollAgain != 'N') {
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+
+            std::cout << "    Would you like to roll again? [Y]es or [N]o? ";
+            std::cin >> rollAgain;
+        }
+
+            renderDivider();
 
         if (rollAgain == 'n' || rollAgain == 'N') {
             playing = false;
         }
     }
 
-    int computerTotal;
-    computerTotal = rollDie() + rollDie() + rollDie() + rollDie();
+    std::cout << "    You stopped on " << playerTotal << ".\n\n";
+    std::cout << "    Opponent's turn to play!\n";
+
+    sleep_until(system_clock::now() + 3s);
+
+    renderDivider();
+
+    int computerTotal = handleComputerTurn();
 
     if (computerTotal > 21) {
-        std::cout << "The computer rolled " << computerTotal << ".\n";
-        std::cout << "You win " << (playerBet * 2) << " credits!\n\n";
+        std::cout << "    Congratulations! You win " << (playerBet * 2) << " credits.\n";
+
         playerCredits += playerBet * 2;
+        
         return;
     }
-    else if (computerTotal > playerTotal || computerTotal == playerTotal) {
-        std::cout << "The computer rolled " << computerTotal << ".\n";
-        std::cout << "You lost " << playerBet << " credits. Better luck next time!\n\n";
+    else if (computerTotal < 22 && computerTotal >= playerTotal) {
+        std::cout << "    Your opponent won!\n\n";
+        std::cout << "    You lost " << playerBet << " credits. Better luck next time!\n";
+        
         playerCredits -= playerBet;
+        
         return;
     }
     else {
-        std::cout << "The computer rolled " << computerTotal << ".\n";
-        std::cout << "You win " << (playerBet * 2) << " credits!\n\n";
+        std::cout << "    Congratulations! You win " << (playerBet * 2) << " credits.\n";
+
         playerCredits += playerBet * 2;
     }
 }
