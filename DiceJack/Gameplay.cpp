@@ -108,8 +108,6 @@ int handleComputerTurn() {
         renderDivider();
 
             if (total > 21) {
-                std::cout << "    Your opponent hit " << total << " and went bust!\n\n";
-
                 playing = false;
             } else if (total < 22 && total >= playerTotal) {
                 playing = false;
@@ -164,6 +162,7 @@ void playRound() {
     int computerTotal = handleComputerTurn();
 
     if (computerTotal > 21) {
+        std::cout << "    Your opponent hit " << computerTotal << " and went bust!\n\n";
         std::cout << "    Congratulations! You win " << (playerBet * 2) << " credits.\n";
 
         playerCredits += playerBet * 2;
@@ -171,7 +170,7 @@ void playRound() {
         return;
     }
     else if (computerTotal < 22 && computerTotal >= playerTotal) {
-        std::cout << "    Your opponent won!\n\n";
+        std::cout << "    Your opponent won with " << computerTotal  << ".\n\n";
         std::cout << "    You lost " << playerBet << " credits. Better luck next time!\n";
         
         playerCredits -= playerBet;
