@@ -13,9 +13,9 @@ void renderWelcomeBanner() {
 	std::cout << "  |                             |  |    /\\    |  |                                |\n";
 	std::cout << "  |                                                                               |\n";
 	std::cout << "  |                                                                               |\n";
-	std::cout << "  |                      You start the game with 100 credits.                     |\n";
+	std::cout << "  |           You and your opponent start the game with 100 credits each.         |\n";
 	std::cout << "  |                                                                               |\n";
-	std::cout << "  |                      When you reach 300 credits, you win.                     |\n";
+	std::cout << "  |                    The first one to reach 300 credits wins.                   |\n";
 	std::cout << "  |                                                                               |\n";
 	std::cout << "  |                                  Good luck!                                   |\n";
 	std::cout << "  |                                                                               |\n";
