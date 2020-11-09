@@ -49,7 +49,7 @@ void handlePlayerBetInput() {
 void handlePlayerTurn() {
     renderRollingDice();
 
-    std::cout << "    Rolling some dice...\n";
+    std::cout << "    Rolling some dice...\n\n";
 
     int firstRoll = rollDie();
     int secondRoll = rollDie();
@@ -65,6 +65,24 @@ void handlePlayerTurn() {
     playerTotal += rollTotal;
 }
 
+bool promptPlayerToRollAgain() {
+    char rollAgain = 'x';
+
+    while (rollAgain != 'y' && rollAgain != 'Y' && rollAgain != 'n' && rollAgain != 'N') {
+        std::cin.clear();
+        std::cin.ignore(10000, '\n');
+
+        std::cout << "    Would you like to roll again? [Y]es or [N]o? ";
+        std::cin >> rollAgain;
+    }
+
+    if (rollAgain == 'n' || rollAgain == 'N') {
+        return false;
+    }
+
+    return true;
+}
+
 int handleComputerTurn() {
     bool playing = true;
     int total = 0;
@@ -72,7 +90,7 @@ int handleComputerTurn() {
     while (playing) {
         renderRollingDice();
 
-        std::cout << "    Your opponent is rolling some dice...\n";
+        std::cout << "    Your opponent is rolling some dice...\n\n";
 
         sleep_until(system_clock::now() + 2s);
 
@@ -110,11 +128,10 @@ int handleComputerTurn() {
 }
 
 void playRound() {
-    handlePlayerBetInput();
-
     bool playing = true;
-
     playerTotal = 0;
+    
+    handlePlayerBetInput();
 
     while (playing) {
         handlePlayerTurn();
@@ -132,21 +149,9 @@ void playRound() {
 
         std::cout << "    Your current total is " << playerTotal << ".\n\n";
 
-        char rollAgain = 'x';
+        playing = promptPlayerToRollAgain();
 
-        while (rollAgain != 'y' && rollAgain != 'Y' && rollAgain != 'n' && rollAgain != 'N') {
-            std::cin.clear();
-            std::cin.ignore(10000, '\n');
-
-            std::cout << "    Would you like to roll again? [Y]es or [N]o? ";
-            std::cin >> rollAgain;
-        }
-
-            renderDivider();
-
-        if (rollAgain == 'n' || rollAgain == 'N') {
-            playing = false;
-        }
+        renderDivider();
     }
 
     std::cout << "    You stopped on " << playerTotal << ".\n\n";
