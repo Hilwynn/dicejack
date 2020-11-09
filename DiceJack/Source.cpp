@@ -6,6 +6,7 @@
 bool gameOver = false;
 bool firstRound = true;
 int playerCredits = 100;
+int computerCredits = 100;
 
 int main()
 {
@@ -21,6 +22,6 @@ int main()
 
         firstRound = false;
 
-        checkPlayerCredits();
+        checkCredits();
     }
 }
