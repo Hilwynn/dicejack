@@ -75,6 +75,8 @@ void checkCredits() {
         renderDivider();
 
         std::cout << "    You currently have " << playerCredits << " credits.\n\n";
-        std::cout << "    Your opponent has " << computerCredits << " credits.\n\n";
+        std::cout << "    Your opponent has " << computerCredits << " credits.\n";
+
+        renderDivider();
     }
 }
