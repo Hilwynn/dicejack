@@ -1,10 +1,16 @@
 #include <random>
+#include <ctime>
 
-std::random_device randomDevice;
-std::mt19937 randomGenerator = std::mt19937(randomDevice());
+std::mt19937 randomGenerator = std::mt19937(std::time(nullptr));
 
 int rollDie() {
     std::uniform_int_distribution<int> randomNumber(1, 6);
+
+    return randomNumber(randomGenerator);
+}
+
+int randomizeComputerBet(int min, int max) {
+    std::uniform_int_distribution<int> randomNumber(min, max);
 
     return randomNumber(randomGenerator);
 }

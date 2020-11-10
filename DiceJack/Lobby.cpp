@@ -42,16 +42,30 @@ void promptPlayerToPlay() {
     }
 }
 
-void checkPlayerCredits() {
-    if (playerCredits >= 300) {
-        renderVictoryBanner();
+void checkCredits() {
+    if (playerCredits >= 300 && playerCredits > computerCredits) {
+        renderVictoryBanner("playerReachedThreshold");
+
+        renderDivider();
+
+        promptPlayerToPlay();
+    }
+    else if (computerCredits >= 300) {
+        renderLossBanner("computerReachedThreshold");
 
         renderDivider();
 
         promptPlayerToPlay();
     }
     else if (playerCredits <= 0) {
-        std::cout << "   You're out of credits!\n";
+        renderLossBanner("playerOutOfCredits");
+
+        renderDivider();
+
+        promptPlayerToPlay();
+    }
+    else if (computerCredits <= 0) {
+        renderVictoryBanner("computerOutOfCredits");
 
         renderDivider();
 
@@ -61,5 +75,8 @@ void checkPlayerCredits() {
         renderDivider();
 
         std::cout << "    You currently have " << playerCredits << " credits.\n\n";
+        std::cout << "    Your opponent has " << computerCredits << " credits.\n";
+
+        renderDivider();
     }
 }

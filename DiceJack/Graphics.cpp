@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "Source.h"
 
 void renderWelcomeBanner() {
@@ -13,26 +14,69 @@ void renderWelcomeBanner() {
 	std::cout << "  |                             |  |    /\\    |  |                                |\n";
 	std::cout << "  |                                                                               |\n";
 	std::cout << "  |                                                                               |\n";
-	std::cout << "  |                      You start the game with 100 credits.                     |\n";
-	std::cout << "  |                                                                               |\n";
-	std::cout << "  |                      When you reach 300 credits, you win.                     |\n";
+	std::cout << "  |           You and your opponent start the game with 100 credits each.         |\n";
+	std::cout << "  |                     If you run out of credits, you're out.                    |\n";
+	std::cout << "  |                    The first one to reach 300 credits wins.                   |\n";
 	std::cout << "  |                                                                               |\n";
 	std::cout << "  |                                  Good luck!                                   |\n";
 	std::cout << "  |                                                                               |\n";
+	std::cout << "  |                                                                               |\n";
+	std::cout << "  |                                                                               |\n";
 	std::cout << "  +-------------------------------------------------------------------------------+\n";
-	std::cout << "\n\n";
+	std::cout << "                                                                 Anna Erkers 2020";
+	std::cout << "\n\n\n";
 }
 
-void renderVictoryBanner() {
-	std::cout << "  +-------------------------------------------------------------------------------+\n";
-	std::cout << "  |                                                                               |\n";
-	std::cout << "  |                      Congratulations, you won the game!                       |\n";
-	std::cout << "  |                                                                               |\n";
-	std::cout << "  |                     You ended the game with " << playerCredits << " credits.                      |\n";
-	std::cout << "  |                                                                               |\n";
-	std::cout << "  |                                 Well played!                                  |\n";
-	std::cout << "  |                                                                               |\n";
-	std::cout << "  +-------------------------------------------------------------------------------+\n";
+void renderVictoryBanner(std::string type) {
+	if (type == "playerReachedThreshold") {
+		std::cout << "  +-------------------------------------------------------------------------------+\n";
+		std::cout << "  |                                                                               |\n";
+		std::cout << "  |                      Congratulations, you won the game!                       |\n";
+		std::cout << "  |                                                                               |\n";
+		std::cout << "  |                     You ended the game with " << playerCredits << " credits.                      |\n";
+		std::cout << "  |                                                                               |\n";
+		std::cout << "  |                                 Well played!                                  |\n";
+		std::cout << "  |                                                                               |\n";
+		std::cout << "  +-------------------------------------------------------------------------------+\n";
+	}
+
+	if (type == "computerOutOfCredits") {
+		std::cout << "  +-------------------------------------------------------------------------------+\n";
+		std::cout << "  |                                                                               |\n";
+		std::cout << "  |               You won because your opponent ran out of credits!               |\n";
+		std::cout << "  |                                                                               |\n";
+		std::cout << "  |                     You ended the game with " << playerCredits << " credits.                      |\n";
+		std::cout << "  |                                                                               |\n";
+		std::cout << "  |                                 Well played!                                  |\n";
+		std::cout << "  |                                                                               |\n";
+		std::cout << "  +-------------------------------------------------------------------------------+\n";
+	}
+}
+
+void renderLossBanner(std::string type) {
+	if (type == "computerReachedThreshold") {
+		std::cout << "  +-------------------------------------------------------------------------------+\n";
+		std::cout << "  |                                                                               |\n";
+		std::cout << "  |                              You lost the game.                               |\n";
+		std::cout << "  |                                                                               |\n";
+		std::cout << "  |                       Your opponent reached " << computerCredits << " credits.                      |\n";
+		std::cout << "  |                                                                               |\n";
+		std::cout << "  |                     You ended the game with " << playerCredits << " credits.                      |\n";
+		std::cout << "  |                                                                               |\n";
+		std::cout << "  |                            Better luck next time!                             |\n";
+		std::cout << "  |                                                                               |\n";
+		std::cout << "  +-------------------------------------------------------------------------------+\n";
+	}
+
+	if (type == "playerOutOfCredits") {
+		std::cout << "  +-------------------------------------------------------------------------------+\n";
+		std::cout << "  |                                                                               |\n";
+		std::cout << "  |                   You ran out of credits and lost the game.                   |\n";
+		std::cout << "  |                                                                               |\n";
+		std::cout << "  |                            Better luck next time!                             |\n";
+		std::cout << "  |                                                                               |\n";
+		std::cout << "  +-------------------------------------------------------------------------------+\n";
+	}
 }
 
 void renderDivider() {
