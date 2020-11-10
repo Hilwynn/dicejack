@@ -20,8 +20,11 @@ void renderWelcomeBanner() {
 	std::cout << "  |                                                                               |\n";
 	std::cout << "  |                                  Good luck!                                   |\n";
 	std::cout << "  |                                                                               |\n";
+	std::cout << "  |                                                                               |\n";
+	std::cout << "  |                                                                               |\n";
 	std::cout << "  +-------------------------------------------------------------------------------+\n";
-	std::cout << "\n\n";
+	std::cout << "                                                                 Anna Erkers 2020";
+	std::cout << "\n\n\n";
 }
 
 void renderVictoryBanner(std::string type) {
@@ -55,6 +58,8 @@ void renderLossBanner(std::string type) {
 		std::cout << "  +-------------------------------------------------------------------------------+\n";
 		std::cout << "  |                                                                               |\n";
 		std::cout << "  |                              You lost the game.                               |\n";
+		std::cout << "  |                                                                               |\n";
+		std::cout << "  |                       Your opponent reached " << computerCredits << " credits.                      |\n";
 		std::cout << "  |                                                                               |\n";
 		std::cout << "  |                     You ended the game with " << playerCredits << " credits.                      |\n";
 		std::cout << "  |                                                                               |\n";
