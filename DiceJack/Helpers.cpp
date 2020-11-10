@@ -9,7 +9,7 @@ int rollDie() {
     return randomNumber(randomGenerator);
 }
 
-int randomizeComputerBet(int min, double max) {
+int randomizeComputerBet(double min, double max) {
     std::uniform_int_distribution<int> randomNumber(min, max);
 
     return randomNumber(randomGenerator);
