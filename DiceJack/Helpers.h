@@ -1,4 +1,4 @@
 #pragma once
 
 int rollDie();
-int randomizeComputerBet(double min, double max);
+int randomizeComputerBet(int min, int max);
